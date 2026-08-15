@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<title> Know Your Police Rights | अपने अधिकार जानिए</title>
+<meta name="description" content="A simple, bilingual guide to your rights with the police in India — what to do, and where to complain." />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@500;700;900&family=Noto+Serif+Devanagari:wght@600;700;800&family=Inter:wght@400;500;600;700&family=Noto+Sans+Devanagari:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<!-- Decorative fixed backdrop -->
+<div class="backdrop" aria-hidden="true">
+  <svg class="chakra-mark" viewBox="0 0 200 200" aria-hidden="true">
+    <circle cx="100" cy="100" r="90" fill="none" stroke="currentColor" stroke-width="1.5"/>
+    <g id="spokes"></g>
+    <circle cx="100" cy="100" r="6" fill="currentColor"/>
+  </svg>
+</div>
+
+<a class="skip-link" href="#main">Skip to content</a>
+
+<!-- ============ HEADER ============ -->
+<header class="site-header">
+  <div class="header-inner">
+    <div class="brand">
+      <span class="brand-badge" aria-hidden="true">
+        <svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="21" fill="none" stroke="currentColor" stroke-width="2"/><g class="brand-spokes"></g><circle cx="24" cy="24" r="3.2" fill="currentColor"/></svg>
+      </span>
+      <div class="brand-text">
+        <p class="brand-title" data-i18n="appTitle">Nyaya Setu</p>
+        <p class="brand-sub" data-i18n="appSubtitle">A citizen's field guide &middot; India</p>
+      </div>
+    </div>
+
+    <div class="header-controls">
+      <button type="button" id="langToggle" class="lang-toggle" role="switch" aria-checked="false" aria-label="Switch language to Hindi">
+        <span class="lang-opt" data-lang="en">EN</span>
+        <span class="lang-thumb" aria-hidden="true"></span>
+        <span class="lang-opt" data-lang="hi">हि</span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- ============ EMERGENCY STRIP ============ -->
+<section class="emergency-strip" aria-label="Emergency helplines">
+  <div class="emergency-strip-inner">
+     <div class="emergency-label">
+      <svg viewBox="0 0 24 24" class="emergency-icon" aria-hidden="true"><path d="M4 4h4l2 5-2.5 1.5a12 12 0 0 0 6 6L15 14l5 2v4a2 2 0 0 1-2 2C9.5 22 2 14.5 2 6a2 2 0 0 1 2-2z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>
+     <span data-i18n="emergencyLabel">Tap to call</span>
+    </div>
+    <div class="emergency-chips" id="emergencyChips" role="list"></div>
+     <button type="button" id="downloadMasterCard" class="ghost-btn emergency-download" data-i18n="downloadAllBtn">
+      Download helpline card
+    </button> 
+  </div>
+</section>
+
+
+<main id="main">
+
+  <!-- ============ INTRO / HERO ============ -->
+  <section class="hero">
+    <div class="hero-inner">
+      <!-- <p class="hero-eyebrow" data-i18n="heroEyebrow">Situation → Your Rights → What To Do → Where To Complain</p> -->
+      <h1 class="hero-title" data-i18n="heroTitle">Stay calm. Know exactly what the law gives you.</h1>
+      <p class="hero-text" data-i18n="heroText">Pick your situation below for plain-language rights, immediate steps, and real complaint contacts.</p>
+
+      <div class="search-wrap">
+        <svg class="search-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="1.8"/><line x1="21" y1="21" x2="16.2" y2="16.2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+        <input type="search" id="searchInput" class="search-input" data-i18n-placeholder="searchPlaceholder" placeholder="Search a situation — e.g. FIR, arrest, traffic, bribe" autocomplete="off" />
+        <span class="search-count" id="searchCount" aria-live="polite"></span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ SITUATION GRID ============ -->
+  <section class="situations" aria-label="Situations">
+    <div class="situations-inner">
+      <div class="file-tab-row">
+        <!-- <span class="file-tab-index"></span> -->
+        <h2 class="section-heading" data-i18n="situationsHeading">Choose your situation</h2>
+      </div>
+      <div class="situation-grid" id="situationGrid" role="list"></div>
+      <p class="no-results" id="noResults" hidden data-i18n="noResults">No matching situation. Try a different word, or call 112 if this is an emergency.</p>
+    </div>
+  </section>
+
+  <!-- ============ DISCLAIMER ============ -->
+  <section class="disclaimer">
+    <div class="disclaimer-inner">
+      <svg viewBox="0 0 24 24" class="disclaimer-icon" aria-hidden="true"><path d="M12 3 2 20h20L12 3z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><line x1="12" y1="9" x2="12" y2="14" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><circle cx="12" cy="17" r="1" fill="currentColor"/></svg>
+      <p data-i18n="disclaimerText">This app explains general rights under the Constitution of India and the Bharatiya Nagarik Suraksha Sanhita (BNSS), 2023 for everyday awareness. It is not legal advice. Laws, procedures and helpline numbers can change or vary by state — for a specific case, please consult a lawyer or your nearest District Legal Services Authority (DLSA, helpline 15100).</p>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <p data-i18n="footerText">Made for citizens, not lawyers. Share this with someone who needs it.</p>
+    <p class="footer-meta" data-i18n="footerMeta">Reflects BNSS 2023 (in force from 1 July 2024) and the Constitution of India.</p>
+  </div>
+</footer>
+
+<!-- ============ DETAIL PANEL (slide-over) ============ -->
+<div class="panel-overlay" id="panelOverlay"></div>
+<aside class="detail-panel" id="detailPanel" role="dialog" aria-modal="true" aria-labelledby="panelTitle" tabindex="-1">
+  <div class="panel-scroll">
+    <button type="button" class="panel-close" id="panelClose" aria-label="Close">
+      <svg viewBox="0 0 24 24"><line x1="5" y1="5" x2="19" y2="19" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><line x1="19" y1="5" x2="5" y2="19" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+    </button>
+
+    <div class="panel-head">
+      <span class="panel-icon" id="panelIcon" aria-hidden="true"></span>
+      <p class="panel-kicker" id="panelKicker"></p>
+      <h2 class="panel-title" id="panelTitle"></h2>
+      <p class="panel-when" id="panelWhen"></p>
+    </div>
+
+    <div class="panel-block">
+      <h3 class="panel-block-title">
+        <span class="panel-block-tag tag-rights" data-i18n="tagRights">Your Rights</span>
+      </h3>
+      <ul class="panel-list rights-list" id="panelRights"></ul>
+    </div>
+
+    <div class="panel-block">
+      <h3 class="panel-block-title">
+        <span class="panel-block-tag tag-todo" data-i18n="tagTodo">What To Do</span>
+      </h3>
+      <ol class="panel-list steps-list" id="panelSteps"></ol>
+    </div>
+
+    <div class="panel-block">
+      <h3 class="panel-block-title">
+        <span class="panel-block-tag tag-complain" data-i18n="tagComplain">Where To Complain</span>
+      </h3>
+      <div class="contact-list" id="panelContacts"></div>
+    </div>
+
+    <div class="panel-law" id="panelLaw"></div>
+
+    <div class="panel-actions">
+      <button type="button" class="primary-btn" id="downloadCardBtn">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v13m0 0-4.5-4.5M12 16l4.5-4.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M4 19h16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+        <span data-i18n="downloadCardBtn">Download this rights card</span>
+      </button>
+    </div>
+  </div>
+</aside>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<canvas id="cardCanvas" width="1080" height="1350" hidden></canvas>
+
+<script src="script.js"></script>
+</body>
+</html>
