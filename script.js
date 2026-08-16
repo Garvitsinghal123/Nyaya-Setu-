@@ -11,13 +11,13 @@
    * ------------------------------------------------------------------ */
   const UI = {
     en: {
-      appTitle: "Know Your Police Rights",
-      appSubtitle: "A citizen's field guide · India",
+      appTitle: "Nyaya Setu",
+      appSubtitle: "Know Your Police Rights · India",
       emergencyLabel: "Tap to call",
       downloadAllBtn: "Download helpline card",
       heroEyebrow: "Situation → Your Rights → What To Do → Where To Complain",
       heroTitle: "Stay calm. Know exactly what the law gives you.",
-      heroText: "Pick your situation below for plain-language rights, immediate steps, and real complaint contacts — built to be understood in under 30 seconds.",
+      heroText: "Pick your situation below for plain-language rights, immediate steps, and real complaint contacts.",
       searchPlaceholder: "Search a situation — e.g. FIR, arrest, traffic, bribe",
       situationsHeading: "Choose your situation",
       noResults: "No matching situation. Try a different word, or call 112 if this is an emergency.",
@@ -34,7 +34,7 @@
       toastCalling: "Opening dialer…",
       langSwitchLabel: "Switch language to Hindi",
       langSwitchLabelBack: "Switch language to English",
-      cardBrand: "KNOW YOUR POLICE RIGHTS · INDIA",
+      cardBrand: "NYAYA SETU · INDIA",
       cardRightsHeading: "YOUR RIGHTS",
       cardTodoHeading: "WHAT TO DO",
       cardHelplineHeading: "HELPLINES",
@@ -42,8 +42,8 @@
       masterCardTitle: "Emergency Helplines — India",
     },
     hi: {
-      appTitle: "अपने पुलिस अधिकार जानिए",
-      appSubtitle: "नागरिकों की सहायता पुस्तिका · भारत",
+      appTitle: "न्याय सेतु",
+      appSubtitle: "अपने पुलिस अधिकार जानिए · भारत",
       emergencyLabel: "कॉल करने हेतु टैप करें",
       downloadAllBtn: "हेल्पलाइन कार्ड डाउनलोड करें",
       heroEyebrow: "स्थिति → आपके अधिकार → क्या करें → शिकायत कहाँ करें",
@@ -65,7 +65,7 @@
       toastCalling: "डायलर खोला जा रहा है…",
       langSwitchLabel: "भाषा हिंदी में बदलें",
       langSwitchLabelBack: "भाषा अंग्रेज़ी में बदलें",
-      cardBrand: "अपने पुलिस अधिकार जानिए · भारत",
+      cardBrand: "न्याय सेतु · भारत",
       cardRightsHeading: "आपके अधिकार",
       cardTodoHeading: "क्या करें",
       cardHelplineHeading: "हेल्पलाइन",
@@ -689,6 +689,7 @@
   const grid = $("#situationGrid");
   const noResults = $("#noResults");
   const emergencyChips = $("#emergencyChips");
+  const emergencyViewport = $("#emergencyViewport");
   const panel = $("#detailPanel");
   const panelOverlay = $("#panelOverlay");
   const panelClose = $("#panelClose");
@@ -708,8 +709,8 @@
       if (t[key] !== undefined) el.setAttribute("placeholder", t[key]);
     });
     document.title = lang === "hi"
-      ? "अपने पुलिस अधिकार जानिए | Know Your Police Rights"
-      : "Know Your Police Rights | अपने अधिकार जानिए";
+      ? "न्याय सेतु | Nyaya Setu"
+      : "Nyaya Setu | न्याय सेतु";
   }
 
   /* ------------------------------------------------------------------ *
@@ -731,17 +732,94 @@
   }
 
   /* ------------------------------------------------------------------ *
-   * 9. RENDER: emergency chips
+   * 9. RENDER: emergency chips (duplicated for a seamless marquee loop)
    * ------------------------------------------------------------------ */
-  function renderEmergencyChips() {
-    emergencyChips.innerHTML = HELPLINES.map((h) => `
-      <a class="call-chip${h.primary ? " primary" : ""}" href="tel:${h.num}" role="listitem" data-num="${h.num}">
+  function chipMarkup(isDuplicate) {
+    return HELPLINES.map((h) => `
+      <a class="call-chip${h.primary ? " primary" : ""}" href="tel:${h.num}" role="listitem" data-num="${h.num}"
+         ${isDuplicate ? 'aria-hidden="true" tabindex="-1"' : ""}>
         <svg class="call-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h4l2 5-2.5 1.5a12 12 0 0 0 6 6L15 14l5 2v4a2 2 0 0 1-2 2C9.5 22 2 14.5 2 6a2 2 0 0 1 2-2z"/></svg>
         <span class="num">${h.num}</span>
         <span class="lbl">${h.label[lang]}</span>
       </a>
     `).join("");
   }
+
+  function renderEmergencyChips() {
+    // Render the chip set twice back-to-back: the CSS animation moves the
+    // track exactly -50% and loops, which reads as one continuous, seamless
+    // right-to-left scroll rather than a jump-cut reset.
+    emergencyChips.innerHTML = chipMarkup(false) + chipMarkup(true);
+    requestAnimationFrame(sizeMarquee);
+  }
+
+  /* ------------------------------------------------------------------ *
+   * 9b. MARQUEE ENGINE
+   * Constant on-screen speed (px/sec) regardless of language/content width,
+   * plus a 10s-scroll / 2-minute-break cycle, plus pause-on-touch so the
+   * chips are always easy to tap accurately.
+   * ------------------------------------------------------------------ */
+  const MARQUEE_SPEED_PX_S = 70;   // constant scroll speed
+  const MARQUEE_SCROLL_MS = 10000; // move for 10 seconds
+  const MARQUEE_BREAK_MS = 10000; // then rest for 2 minutes
+
+  let marqueePhaseRunning = false; // true while in the "scrolling" 10s phase
+  let marqueeUserPaused = false;   // true while a finger/pointer is on the strip
+  let marqueeCycleTimer = null;
+  const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+
+  function sizeMarquee() {
+    // Track holds two copies of the content — half its scroll width is one
+    // full set, i.e. the true loop distance. Duration = distance / speed,
+    // so the visual speed stays constant whether the label text is English
+    // or the (typically wider) Hindi strings.
+    const distance = emergencyChips.scrollWidth / 2;
+    const duration = Math.max(distance / MARQUEE_SPEED_PX_S, 6);
+    emergencyChips.style.animationDuration = duration.toFixed(2) + "s";
+  }
+
+  function applyMarqueeVisualState() {
+    const shouldRun = marqueePhaseRunning && !marqueeUserPaused && !prefersReducedMotion.matches;
+    emergencyChips.style.animationPlayState = shouldRun ? "running" : "paused";
+  }
+
+  function startMarqueeCycle() {
+    clearTimeout(marqueeCycleTimer);
+    if (prefersReducedMotion.matches) {
+      marqueePhaseRunning = false;
+      applyMarqueeVisualState();
+      return;
+    }
+    const scrollPhase = () => {
+      marqueePhaseRunning = true;
+      applyMarqueeVisualState();
+      marqueeCycleTimer = setTimeout(breakPhase, MARQUEE_SCROLL_MS);
+    };
+    const breakPhase = () => {
+      marqueePhaseRunning = false;
+      applyMarqueeVisualState();
+      marqueeCycleTimer = setTimeout(scrollPhase, MARQUEE_BREAK_MS);
+    };
+    scrollPhase();
+  }
+
+  function pauseMarqueeForInteraction() {
+    marqueeUserPaused = true;
+    applyMarqueeVisualState();
+  }
+  function resumeMarqueeAfterInteraction() {
+    marqueeUserPaused = false;
+    applyMarqueeVisualState();
+  }
+
+  ["mouseenter", "focusin", "touchstart"].forEach((evt) => {
+    emergencyViewport.addEventListener(evt, pauseMarqueeForInteraction, { passive: true });
+  });
+  ["mouseleave", "focusout", "touchend", "touchcancel"].forEach((evt) => {
+    emergencyViewport.addEventListener(evt, resumeMarqueeAfterInteraction, { passive: true });
+  });
+  prefersReducedMotion.addEventListener?.("change", startMarqueeCycle);
+  window.addEventListener("resize", () => requestAnimationFrame(sizeMarquee));
 
   /* ------------------------------------------------------------------ *
    * 10. RENDER: situation grid (with optional filter)
@@ -1076,6 +1154,7 @@
     applyStaticI18n();
     renderEmergencyChips();
     renderGrid("");
+    startMarqueeCycle();
   }
 
   document.addEventListener("DOMContentLoaded", init);

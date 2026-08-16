@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-<title> Know Your Police Rights | अपने अधिकार जानिए</title>
+<title>Nyaya Setu | न्याय सेतु</title>
 <meta name="description" content="A simple, bilingual guide to your rights with the police in India — what to do, and where to complain." />
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -49,17 +49,18 @@
 <!-- ============ EMERGENCY STRIP ============ -->
 <section class="emergency-strip" aria-label="Emergency helplines">
   <div class="emergency-strip-inner">
-     <div class="emergency-label">
+    <div class="emergency-label">
       <svg viewBox="0 0 24 24" class="emergency-icon" aria-hidden="true"><path d="M4 4h4l2 5-2.5 1.5a12 12 0 0 0 6 6L15 14l5 2v4a2 2 0 0 1-2 2C9.5 22 2 14.5 2 6a2 2 0 0 1 2-2z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>
-     <span data-i18n="emergencyLabel">Tap to call</span>
+      <span data-i18n="emergencyLabel">Tap to call</span>
     </div>
-    <div class="emergency-chips" id="emergencyChips" role="list"></div>
-     <button type="button" id="downloadMasterCard" class="ghost-btn emergency-download" data-i18n="downloadAllBtn">
+    <div class="emergency-chips-viewport" id="emergencyViewport">
+      <div class="emergency-chips" id="emergencyChips" role="list"></div>
+    </div>
+    <button type="button" id="downloadMasterCard" class="ghost-btn emergency-download" data-i18n="downloadAllBtn">
       Download helpline card
-    </button> 
+    </button>
   </div>
 </section>
-
 
 <main id="main">
 
@@ -82,7 +83,7 @@
   <section class="situations" aria-label="Situations">
     <div class="situations-inner">
       <div class="file-tab-row">
-        <!-- <span class="file-tab-index"></span> -->
+        <span class="file-tab-index">01</span>
         <h2 class="section-heading" data-i18n="situationsHeading">Choose your situation</h2>
       </div>
       <div class="situation-grid" id="situationGrid" role="list"></div>

@@ -4,12 +4,12 @@
    ========================================================================== */
 
 :root{
-  /* --- Color: deep navy base, warm paper text, saffron accent --- */
-  --navy-950:#0A1626;
-  --navy-900:#0D1D33;
-  --navy-800:#12294A;
-  --navy-700:#16305A;
-  --navy-600:#1D3E70;
+  /* --- Color: navy base (lighter slate-navy), warm paper text, saffron accent--- */
+  --navy-950:#17293F; 
+  --navy-900:#1D3252;
+  --navy-800:#24406B;
+  --navy-700:#2C5081;
+  --navy-600:#345C95;
   --hairline: rgba(233,228,214,0.12);
   --hairline-strong: rgba(233,228,214,0.22);
 
@@ -188,13 +188,31 @@ a{ color: var(--saffron-bright); }
 }
 .emergency-icon{ width:15px; height:15px; }
 
-.emergency-chips{
+.emergency-chips-viewport{
   flex:1; min-width:0;
-  display:flex; gap:.5rem; overflow-x:auto; scrollbar-width:thin;
-  padding:.15rem 0;
+  overflow:hidden;
+  position:relative;
+  -webkit-mask-image: linear-gradient(to right, transparent 0, #000 24px, #000 calc(100% - 24px), transparent 100%);
+  mask-image: linear-gradient(to right, transparent 0, #000 24px, #000 calc(100% - 24px), transparent 100%);
 }
-.emergency-chips::-webkit-scrollbar{ height:4px; }
-.emergency-chips::-webkit-scrollbar-thumb{ background: var(--hairline-strong); border-radius:2px; }
+.emergency-chips{
+  display:flex; gap:.5rem; width:max-content;
+  padding:.15rem 0;
+  animation-name: marqueeScroll;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  animation-play-state: paused; /* controlled by JS: 10s scroll / 2min break cycle */
+}
+@keyframes marqueeScroll{
+  from{ transform: translateX(0); }
+  to{ transform: translateX(-50%); } /* content is duplicated, so -50% is one full seamless loop */
+}
+
+/* Reduced motion: no auto-scroll, fall back to a manually swipeable strip */
+@media (prefers-reduced-motion: reduce){
+  .emergency-chips{ animation: none !important; transform:none !important; overflow-x:auto; }
+  .emergency-chips-viewport{ overflow-x:auto; -webkit-mask-image:none; mask-image:none; }
+}
 
 .call-chip{
   flex:none;
